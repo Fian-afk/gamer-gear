@@ -1,8 +1,9 @@
 import requests
 import pandas as pd
+from config import GOOGLE_API_KEY
 
 # 1. Masukkan API Key YouTube Anda
-API_KEY = "AIzaSyByvdQyscbkA0KS2G7MUvq2Zz2p6F_3Poo"
+API_KEY = GOOGLE_API_KEY
 
 # 2. Masukkan ID Video YouTube (Contoh: video review ASUS TUF atau Lenovo Legion)
 VIDEO_ID = "rW37y2_cEs8"
