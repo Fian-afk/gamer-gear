@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS peripherals (
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS reviews (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_sumber TEXT,
     produk_id INTEGER,
     sumber TEXT,
     teks_asli TEXT,
@@ -50,6 +51,13 @@ CREATE TABLE IF NOT EXISTS reviews (
     tanggal TEXT,
     FOREIGN KEY (produk_id) REFERENCES laptops (id)
 )
+''')
+review_columns = {row[1] for row in cursor.execute("PRAGMA table_info(reviews)")}
+if 'id_sumber' not in review_columns:
+    cursor.execute('ALTER TABLE reviews ADD COLUMN id_sumber TEXT')
+cursor.execute('''
+CREATE UNIQUE INDEX IF NOT EXISTS idx_reviews_source_id
+ON reviews (sumber, id_sumber)
 ''')
 
 # 4. Tabel sentiment_results
