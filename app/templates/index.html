@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GamerGear - Portal Analisis & Rekomendasi Laptop Gaming AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0b0f19;
+      --bg-card: #131b2e;
+      --bg-input: #1b2640;
+      --border-color: #27375a;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --accent: #06b6d4;
+      --accent-glow: rgba(6, 182, 212, 0.25);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      background: rgba(11, 15, 25, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #06b6d4, #6366f1, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+    .badge-tag {
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid var(--primary);
+      color: #c7d2fe;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    nav a:hover, nav a.active {
+      color: var(--accent);
+    }
+
+    /* CONTAINER & TABS */
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem 4rem 1.5rem;
+    }
+    .hero {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .hero p {
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: #111827;
+      padding: 0.4rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 2rem;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      flex: 1;
+      min-width: 140px;
+      padding: 0.75rem 1rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+    }
+
+    /* CARD & FORMS */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      display: none;
+    }
+    .card.active { display: block; animation: fadeIn 0.3s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-title {
+      font-size: 1.35rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .card-subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+    .form-control {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-control:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+    .btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    /* RESULT BOX */
+    .result-box {
+      margin-top: 1.5rem;
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: none;
+    }
+    .result-box.show { display: block; animation: fadeIn 0.3s ease; }
+
+    /* CHATBOX */
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 520px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #0d1322;
+    }
+    .chat-messages {
+      flex: 1;
+      padding: 1.25rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .chat-bubble {
+      max-width: 80%;
+      padding: 0.9rem 1.2rem;
+      border-radius: 12px;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+    .chat-bubble.bot {
+      background: #1e293b;
+      align-self: flex-start;
+      border-left: 3px solid var(--accent);
+    }
+    .chat-bubble.user {
+      background: var(--primary);
+      color: #fff;
+      align-self: flex-end;
+    }
+    .chat-input-area {
+      padding: 1rem;
+      background: #111827;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 0.75rem;
+    }
+    .quick-prompts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .quick-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .quick-btn:hover {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    /* GRID LAPTOP CARDS */
+    .laptop-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+    .laptop-card {
+      background: #151f38;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .laptop-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+    .laptop-card h4 {
+      font-size: 1.05rem;
+      margin-bottom: 0.4rem;
+      color: #fff;
+    }
+    .laptop-card .price {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+    .spec-list {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      margin-bottom: 1rem;
+    }
+
+    /* TABLES */
+    .table-responsive {
+      overflow-x: auto;
+      margin-top: 1rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    th {
+      background: #111827;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <a href="/" class="brand">
+      <span>⚡ GamerGear</span>
+      <span class="badge-tag">AI Flask Engine</span>
+    </a>
+    <nav>
+      <a href="#predict" onclick="switchTab('tab-predict')">Estimasi Harga</a>
+      <a href="#recommend" onclick="switchTab('tab-recommend')">Rekomendasi</a>
+      <a href="#sentiment" onclick="switchTab('tab-sentiment')">Sentimen & Klaster</a>
+      <a href="#compare" onclick="switchTab('tab-compare')">Komparasi</a>
+      <a href="#chat" onclick="switchTab('tab-chat')">Chatbot AI</a>
+      <a href="#admin" onclick="switchTab('tab-admin')">Admin</a>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <div class="container">
+    <div class="hero">
+      <h1>Portal Cerdas Spesifikasi & Rekomendasi Laptop Gaming</h1>
+      <p>Didukung algoritma Machine Learning Regresi Random Forest, analisis sentimen NLP, klaster keluhan, dan chatbot rule-based interaktif.</p>
+    </div>
+
+    <!-- NAVIGATION TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('tab-predict', this)">💰 Estimasi Harga ML</button>
+      <button class="tab-btn" onclick="switchTab('tab-recommend', this)">🎯 Rekomendasi Budget</button>
+      <button class="tab-btn" onclick="switchTab('tab-sentiment', this)">📊 Sentimen & Klaster</button>
+      <button class="tab-btn" onclick="switchTab('tab-compare', this)">⚖️ Komparasi Laptop</button>
+      <button class="tab-btn" onclick="switchTab('tab-chat', this)">🤖 Chatbot Assistant</button>
+      <button class="tab-btn" onclick="switchTab('tab-admin', this)">📋 Log Unanswered</button>
+    </div>
+
+    <!-- TAB 1: PREDICT PRICE -->
+    <div id="tab-predict" class="card active">
+      <h3 class="card-title">💰 Estimasi Harga Wajar Laptop (POST /api/predict)</h3>
+      <p class="card-subtitle">Masukkan spesifikasi teknis untuk memprediksi harga wajar laptop menggunakan model machine learning.</p>
+
+      <form id="form-predict" onsubmit="handlePredict(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>RAM (GB)</label>
+            <input type="number" id="pred-ram" class="form-control" value="16" required min="4" max="128">
+          </div>
+          <div class="form-group">
+            <label>Storage SSD (GB)</label>
+            <input type="number" id="pred-ssd" class="form-control" value="512" required min="128" max="4096">
+          </div>
+          <div class="form-group">
+            <label>Ukuran Layar (Inci)</label>
+            <input type="number" step="0.1" id="pred-layar" class="form-control" value="15.6" required>
+          </div>
+          <div class="form-group">
+            <label>Refresh Rate (Hz)</label>
+            <input type="number" id="pred-hz" class="form-control" value="144" required min="60" max="360">
+          </div>
+          <div class="form-group">
+            <label>Tier Performa (1.0 - 5.5)</label>
+            <select id="pred-tier" class="form-control">
+              <option value="1.5">Tier 1.5 - Entry Level (Iris Xe / Vega)</option>
+              <option value="2.0">Tier 2.0 - Budget Gaming (GTX 1650)</option>
+              <option value="2.5" selected>Tier 2.5 - Mainstream (RTX 2050 / RTX 3050)</option>
+              <option value="3.0">Tier 3.0 - Mid Gaming (RTX 4050 / RTX 3060)</option>
+              <option value="3.5">Tier 3.5 - High Performance (RTX 4060)</option>
+              <option value="4.5">Tier 4.5 - Enthusiast (RTX 4070 / RTX 4080)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Harga Listing Toko (Opsional untuk Cek Skor Value)</label>
+            <input type="text" id="pred-listing" class="form-control" placeholder="Contoh: 15.000.000 atau 15jt">
+          </div>
+        </div>
+        <button type="submit" class="btn">🚀 Hitung Estimasi Harga</button>
+      </form>
+
+      <div id="pred-result" class="result-box">
+        <h4 style="color: var(--accent); margin-bottom: 0.5rem;">Hasil Prediksi Harga Wajar</h4>
+        <div style="font-size: 1.8rem; font-weight: 700; color: #10b981;" id="pred-val-rupiah">Rp 0</div>
+        <div id="pred-val-deal" style="margin-top: 0.5rem; font-size: 0.95rem; color: #cbd5e1;"></div>
+      </div>
+    </div>
+
+    <!-- TAB 2: RECOMMENDATION -->
+    <div id="tab-recommend" class="card">
+      <h3 class="card-title">🎯 Rekomendasi Laptop Gaming Berdasarkan Budget (GET /api/recommend)</h3>
+      <p class="card-subtitle">Cari laptop terbaik sesuai anggaran maksimalmu dari database SQLite GamerGear.</p>
+
+      <form id="form-recommend" onsubmit="handleRecommend(event)" style="display: flex; gap: 0.75rem; max-width: 500px;">
+        <input type="text" id="rec-budget" class="form-control" placeholder="Contoh: 15 juta, 15000000, atau 12jt" required>
+        <button type="submit" class="btn">Cari Laptop</button>
+      </form>
+
+      <div id="rec-message" style="margin-top: 1rem; color: #94a3b8; font-size: 0.9rem;"></div>
+      <div id="rec-grid" class="laptop-grid"></div>
+    </div>
+
+    <!-- TAB 3: SENTIMENT & CLUSTERS -->
+    <div id="tab-sentiment" class="card">
+      <h3 class="card-title">📊 Analisis Sentimen Aspek & Klaster Keluhan</h3>
+      <p class="card-subtitle">Rekapitulasi ulasan komunitas dari tabel sentiment_results dan complaint_clusters.</p>
+
+      <div style="margin-bottom: 2rem;">
+        <button class="btn" onclick="loadSentimentAndClusters()">🔄 Muat Data Sentimen & Klaster</button>
+      </div>
+
+      <div id="sentiment-summary-box" style="margin-bottom: 2rem;"></div>
+
+      <h4 style="margin-bottom: 0.75rem; color: var(--accent);">⚠️ 4 Klaster Keluhan Teratas (K-Means + TruncatedSVD)</h4>
+      <div id="clusters-container" class="laptop-grid"></div>
+    </div>
+
+    <!-- TAB 4: COMPARE -->
+    <div id="tab-compare" class="card">
+      <h3 class="card-title">⚖️ Komparasi Spesifikasi Laptop (GET /api/compare)</h3>
+      <p class="card-subtitle">Bandingkan 2 atau lebih laptop secara berdampingan.</p>
+
+      <form id="form-compare" onsubmit="handleCompare(event)" style="display: flex; gap: 0.75rem; max-width: 500px; margin-bottom: 1.5rem;">
+        <input type="text" id="cmp-ids" class="form-control" value="1,2" placeholder="Masukkan ID laptop dipisahkan koma (misal: 1,2)" required>
+        <button type="submit" class="btn">Bandingkan</button>
+      </form>
+
+      <div id="cmp-analysis" style="margin-bottom: 1rem;"></div>
+      <div id="cmp-table-wrapper" class="table-responsive"></div>
+    </div>
+
+    <!-- TAB 5: CHATBOT -->
+    <div id="tab-chat" class="card">
+      <h3 class="card-title">🤖 Asisten Chatbot GamerGear (POST /api/chat)</h3>
+      <p class="card-subtitle">Konsultasikan kebutuhan spek game, bottleneck, dan rekomendasi laptop secara interaktif.</p>
+
+      <div class="quick-prompts">
+        <span style="font-size: 0.8rem; color: #94a3b8; align-self: center;">Coba tanya:</span>
+        <button class="quick-btn" onclick="sendQuickChat('Halo, fitur apa saja yang bisa dibantu?')">👋 Sapaan & Fitur</button>
+        <button class="quick-btn" onclick="sendQuickChat('Laptop i5 gen 12 RTX 3050 RAM 16GB kuat main Black Myth Wukong?')">🎮 Cek Game Wukong</button>
+        <button class="quick-btn" onclick="sendQuickChat('Rekomendasi laptop gaming budget 15 juta')">💰 Rekomendasi 15jt</button>
+        <button class="quick-btn" onclick="sendQuickChat('Mending RTX 3050 vs RTX 4060?')">⚖️ Bandingkan GPU</button>
+        <button class="quick-btn" onclick="sendQuickChat('Apakah Core i3 gen 10 dan RTX 4070 bakal bottleneck?')">⚡ Cek Bottleneck</button>
+      </div>
+
+      <div class="chat-container">
+        <div class="chat-messages" id="chat-messages">
+          <div class="chat-bubble bot">Halo! Saya GamerGear AI Assistant. Mau cek spek game favorit, cari rekomendasi laptop, atau bandingkan komponen? Silakan tanyakan ya! 👋</div>
+        </div>
+        <form class="chat-input-area" onsubmit="handleChatSubmit(event)">
+          <input type="text" id="chat-input" class="form-control" placeholder="Ketik pertanyaanmu di sini..." autocomplete="off" required>
+          <button type="submit" class="btn">Kirim</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- TAB 6: ADMIN LOG UNANSWERED -->
+    <div id="tab-admin" class="card">
+      <h3 class="card-title">📋 Log Pertanyaan Belum Terjawab (GET /admin/unanswered)</h3>
+      <p class="card-subtitle">Daftar query dari pengguna yang tidak dipahami oleh mesin chatbot untuk bahan evaluasi tim kurasi.</p>
+
+      <div style="margin-bottom: 1rem; display: flex; gap: 0.5rem;">
+        <button class="btn" onclick="loadUnanswered('all')">Tampilkan Semua</button>
+        <button class="btn" style="background: #334155;" onclick="loadUnanswered('pending')">Hanya Status Pending</button>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Waktu</th>
+              <th>Pertanyaan</th>
+              <th>Intent Terdekat</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="unanswered-tbody">
+            <tr><td colspan="5" style="text-align: center; color: #94a3b8;">Klik tombol di atas untuk memuat log.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Tab switcher
+    function switchTab(tabId, element) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
+      
+      const targetCard = document.getElementById(tabId);
+      if (targetCard) targetCard.classList.add('active');
+
+      if (element) {
+        element.classList.add('active');
+      } else {
+        const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+        if (btn) btn.classList.add('active');
+      }
+    }
+
+    // 1. Predict Price
+    async function handlePredict(e) {
+      e.preventDefault();
+      const payload = {
+        ram_gb: document.getElementById('pred-ram').value,
+        ssd_gb: document.getElementById('pred-ssd').value,
+        layar_inci: document.getElementById('pred-layar').value,
+        refresh_rate: document.getElementById('pred-hz').value,
+        tier_performa: document.getElementById('pred-tier').value,
+        harga_listing: document.getElementById('pred-listing').value
+      };
+
+      try {
+        const res = await fetch('/api/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          const resBox = document.getElementById('pred-result');
+          document.getElementById('pred-val-rupiah').innerText = data.harga_prediksi_formatted;
+          
+          let dealText = `Tier Performa: ${data.features_used.tier_performa} | RAM: ${data.features_used.ram_gb}GB | SSD: ${data.features_used.ssd_gb}GB`;
+          if (data.skor_value !== null) {
+            dealText += `<br><strong>Skor Value:</strong> ${data.skor_value} (Status: <em>${data.status_value}</em>)`;
+          }
+          document.getElementById('pred-val-deal').innerHTML = dealText;
+          resBox.classList.add('show');
+        } else {
+          alert('Error: ' + data.error);
+        }
+      } catch (err) {
+        alert('Terjadi kesalahan jaringan: ' + err);
+      }
+    }
+
+    // 2. Recommend Laptops
+    async function handleRecommend(e) {
+      e.preventDefault();
+      const budget = document.getElementById('rec-budget').value;
+      const msgBox = document.getElementById('rec-message');
+      const grid = document.getElementById('rec-grid');
+      msgBox.innerText = 'Mencari rekomendasi...';
+      grid.innerHTML = '';
+
+      try {
+        const res = await fetch(`/api/recommend?budget=${encodeURIComponent(budget)}`);
+        const result = await res.json();
+        if (result.success) {
+          msgBox.innerText = result.message;
+          grid.innerHTML = result.data.map(lap => `
+            <div class="laptop-card">
+              <div>
+                <h4>${lap.nama}</h4>
+                <div class="price">${lap.harga_listing_formatted}</div>
+                <div class="spec-list">
+                  <div>⚙️ <strong>CPU:</strong> ${lap.cpu}</div>
+                  <div>🎮 <strong>GPU:</strong> ${lap.gpu}</div>
+                  <div>💾 <strong>RAM/SSD:</strong> ${lap.ram_gb}GB / ${lap.ssd_gb}GB</div>
+                  <div>🖥️ <strong>Layar:</strong> ${lap.layar_inci}" (${lap.refresh_rate}Hz)</div>
+                </div>
+              </div>
+              <div style="font-size: 0.8rem; color: #10b981; border-top: 1px solid #27375a; padding-top: 0.5rem;">
+                Skor Value: ${lap.skor_value ?? '-'} | Tier: ${lap.tier_performa ?? '-'}
+              </div>
+            </div>
+          `).join('');
+        } else {
+          msgBox.innerText = 'Error: ' + result.error;
+        }
+      } catch (err) {
+        msgBox.innerText = 'Kesalahan: ' + err;
+      }
+    }
+
+    // 3. Sentiment & Clusters
+    async function loadSentimentAndClusters() {
+      try {
+        const [resSent, resClust] = await Promise.all([
+          fetch('/api/sentiment/all'),
+          fetch('/api/clusters')
+        ]);
+        const dataSent = await resSent.json();
+        const dataClust = await resClust.json();
+
+        // Render Sentiment
+        if (dataSent.success) {
+          const s = dataSent.ringkasan_sentimen;
+          const p = dataSent.persentase;
+          document.getElementById('sentiment-summary-box').innerHTML = `
+            <div style="background: #151f38; padding: 1.25rem; border-radius: 12px; border: 1px solid var(--border-color);">
+              <h4 style="margin-bottom: 0.75rem;">Distribusi Sentimen Ulasan Komunitas (Total: ${dataSent.total_ulasan} ulasan)</h4>
+              <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 150px; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: 8px; padding: 0.75rem; text-align: center;">
+                  <div style="color: #10b981; font-weight: 700; font-size: 1.3rem;">${s.positif} (${p.positif}%)</div>
+                  <div style="font-size: 0.85rem; color: #cbd5e1;">Sentimen Positif</div>
+                </div>
+                <div style="flex: 1; min-width: 150px; background: rgba(148, 163, 184, 0.15); border: 1px solid #94a3b8; border-radius: 8px; padding: 0.75rem; text-align: center;">
+                  <div style="color: #94a3b8; font-weight: 700; font-size: 1.3rem;">${s.netral} (${p.netral}%)</div>
+                  <div style="font-size: 0.85rem; color: #cbd5e1;">Sentimen Netral</div>
+                </div>
+                <div style="flex: 1; min-width: 150px; background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; border-radius: 8px; padding: 0.75rem; text-align: center;">
+                  <div style="color: #ef4444; font-weight: 700; font-size: 1.3rem;">${s.negatif} (${p.negatif}%)</div>
+                  <div style="font-size: 0.85rem; color: #cbd5e1;">Sentimen Negatif</div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        // Render Clusters
+        if (dataClust.success) {
+          document.getElementById('clusters-container').innerHTML = dataClust.data.map(c => `
+            <div class="laptop-card">
+              <div>
+                <span class="badge-tag" style="background: rgba(239, 68, 68, 0.2); border-color: #ef4444; color: #fca5a5;">
+                  Klaster #${c.cluster_no} • ${c.jumlah_ulasan} Kasus
+                </span>
+                <h4 style="margin-top: 0.6rem;">${c.label}</h4>
+                <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 0.4rem;">
+                  <strong>Kata Kunci:</strong> ${c.kata_kunci_str}
+                </p>
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch (err) {
+        alert('Gagal memuat data: ' + err);
+      }
+    }
+
+    // 4. Compare Laptops
+    async function handleCompare(e) {
+      e.preventDefault();
+      const ids = document.getElementById('cmp-ids').value;
+      const anlBox = document.getElementById('cmp-analysis');
+      const tblBox = document.getElementById('cmp-table-wrapper');
+      anlBox.innerHTML = 'Memuat komparasi...';
+
+      try {
+        const res = await fetch(`/api/compare?ids=${encodeURIComponent(ids)}`);
+        const data = await res.json();
+        if (data.success) {
+          const a = data.analysis;
+          anlBox.innerHTML = `
+            <div style="background: #111827; padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.9rem;">
+              <div>🏆 <strong>Termurah:</strong> ${a.cheapest.nama} (${a.cheapest.harga})</div>
+              <div>⚡ <strong>Performa Tertinggi:</strong> ${a.highest_performance.nama} (Tier ${a.highest_performance.tier_performa})</div>
+              <div>💎 <strong>Value Terbaik:</strong> ${a.best_value.nama} (Skor Value ${a.best_value.skor_value})</div>
+            </div>
+          `;
+
+          tblBox.innerHTML = `
+            <table>
+              <thead>
+                <tr>
+                  <th>Fitur</th>
+                  ${data.data.map(l => `<th>${l.nama}</th>`).join('')}
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Harga Listing</td>${data.data.map(l => `<td><strong style="color:var(--accent);">${l.harga_listing_formatted}</strong></td>`).join('')}</tr>
+                <tr><td>Processor (CPU)</td>${data.data.map(l => `<td>${l.cpu}</td>`).join('')}</tr>
+                <tr><td>Grafis (GPU)</td>${data.data.map(l => `<td>${l.gpu}</td>`).join('')}</tr>
+                <tr><td>RAM & SSD</td>${data.data.map(l => `<td>${l.ram_gb}GB / ${l.ssd_gb}GB</td>`).join('')}</tr>
+                <tr><td>Layar & Hz</td>${data.data.map(l => `<td>${l.layar_inci}" ${l.refresh_rate}Hz</td>`).join('')}</tr>
+                <tr><td>Tier Performa</td>${data.data.map(l => `<td>${l.tier_performa} / 5.5</td>`).join('')}</tr>
+                <tr><td>Skor Value</td>${data.data.map(l => `<td>${l.skor_value}</td>`).join('')}</tr>
+              </tbody>
+            </table>
+          `;
+        } else {
+          anlBox.innerHTML = `<span style="color:#ef4444;">Error: ${data.error}</span>`;
+          tblBox.innerHTML = '';
+        }
+      } catch (err) {
+        anlBox.innerText = 'Error: ' + err;
+      }
+    }
+
+    // 5. Chatbot
+    async function handleChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('chat-input');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      appendChatMessage(msg, 'user');
+      input.value = '';
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: msg })
+        });
+        const data = await res.json();
+        if (data.success) {
+          appendChatMessage(data.response, 'bot');
+        } else {
+          appendChatMessage('Terjadi kendala: ' + data.error, 'bot');
+        }
+      } catch (err) {
+        appendChatMessage('Gagal terhubung ke chatbot: ' + err, 'bot');
+      }
+    }
+
+    function appendChatMessage(text, sender) {
+      const chatBox = document.getElementById('chat-messages');
+      const bubble = document.createElement('div');
+      bubble.className = `chat-bubble ${sender}`;
+      bubble.innerText = text;
+      chatBox.appendChild(bubble);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function sendQuickChat(text) {
+      document.getElementById('chat-input').value = text;
+      document.querySelector('.chat-input-area button').click();
+    }
+
+    // 6. Admin Unanswered
+    async function loadUnanswered(status) {
+      const tbody = document.getElementById('unanswered-tbody');
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Memuat log...</td></tr>';
+
+      try {
+        const url = status && status !== 'all' ? `/admin/unanswered?status=${status}` : '/admin/unanswered';
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.success && data.data.length > 0) {
+          tbody.innerHTML = data.data.map(row => `
+            <tr>
+              <td>${row.id}</td>
+              <td style="font-size:0.8rem; color:#94a3b8;">${row.waktu.split('T')[0]} ${row.waktu.split('T')[1].slice(0,8)}</td>
+              <td><strong>${row.pertanyaan}</strong></td>
+              <td><span class="badge-tag">${row.intent_terdekat}</span></td>
+              <td><span style="color:#f59e0b;">${row.status_tinjauan}</span></td>
+            </tr>
+          `).join('');
+        } else {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color:#10b981;">Tidak ada pertanyaan belum terjawab! 🎉</td></tr>';
+        }
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color:#ef4444;">Error: ${err}</td></tr>`;
+      }
+    }
+  </script>
+</body>
+</html>
